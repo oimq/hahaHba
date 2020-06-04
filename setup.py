@@ -7,6 +7,6 @@ setup(name='hahaHba',
       author_email='taep0q@gmail.com',
       description='Mode easily handle the elasticsearch module',
       packages=find_packages(),
-      install_requires=['elasticsearch', 'tqdm'],
+      install_requires=['elasticsearch', 'tqdm', 'thriftpy2'],
       zip_safe=False
       )

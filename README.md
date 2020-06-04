@@ -8,6 +8,8 @@ for installing and using, requirements are below :
 
 * happybase : https://github.com/python-happybase/happybase
 
+* thrift : https://github.com/Thriftpy/thriftpy2
+
 * Hash : https://github.com/oimq/Hash
 
 ######'Very thanks to happybase.'
