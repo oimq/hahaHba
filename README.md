@@ -68,9 +68,17 @@ hahaHba consisted by three parts.
 
 * Script
 ```python3
+META_PATH = os.path.join('./', 'hbase_meta.json')
+DATA_PATH = os.path.join('./', 'cleaned.json')
+hs = hahaSavor(META_PATH)
+hs.store(DATA_PATH, '-r') # '-r' is option that resets the table.
 ```
 * Outputs
 ```python
+Delete table ~_table success.
+Create table ~_table success.
+
+100%|████████████████████████████████████████████████████| 1001/1001 [00:03<00:00, 284.33it/s]
 ```
 
 ***
