@@ -12,7 +12,7 @@ for installing and using, requirements are below :
 
 * Hash : https://github.com/oimq/Hash
 
-######'Very thanks to happybase.'
+###### 'Very thanks to happybase.'
 
 ***
 
