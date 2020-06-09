@@ -68,11 +68,9 @@ hahaHba consisted by three parts.
 
 * Script
 ```python3
-Sorry, we add this later...
 ```
 * Outputs
 ```python
-Sorry, we add this later...
 ```
 
 ***
