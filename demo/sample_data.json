@@ -1,0 +1,36 @@
+[
+    {
+        "type": [
+            "friends"
+        ],
+        "name": [
+            "daniel"
+        ],
+        "phone": [
+            "01012345678"
+        ],
+        "age": [
+            "26"
+        ],
+        "trash": [
+            "heheheheheeeaa"
+        ]
+    },
+    {
+        "type": [
+            "business"
+        ],
+        "name": [
+            "franklin"
+        ],
+        "phone": [
+            "01098765432"
+        ],
+        "age": [
+            "31"
+        ],
+        "trash": [
+            "rororororrrror"
+        ]
+    }
+]

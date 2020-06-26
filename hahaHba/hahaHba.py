@@ -25,7 +25,8 @@ class hahaHba :
         if not self.available : self.error('Server not exist.', 'SERVER'); return False
         try :
             tables = self.conn.tables()
-            return name.encode() in tables
+            if type(name) == type('') : name = name.encode()
+            return name in tables
         except Exception as e :
             self.connect()
             self.error(e, 'GET TABLES')
@@ -66,7 +67,7 @@ class hahaHba :
             table = self.conn.table(name)
             if table.rows([rkey])   :   
                                         if debug : print("{} already exists in table {}".format(rkey, name))
-            else                    :   table.put(rkey, data)
+            table.put(rkey, data)
         except Exception as e :
             self.error(e, "PUT")       
         else :
@@ -118,4 +119,5 @@ class hahaHba :
 if __name__=="__main__" :
     hh = hahaHba("localhost", 9090)
     # pp(hh.scan("clo_tabl_shirt", row_prefix=None, filters="PrefixFilter('GwIPCxAfNi4X') AND PrefixFilter('GwI')"))
-    pp(hh.scan("clo_tabl_shirt", row_prefix=None, filters="QualifierFilter(=,'substring:black')"))
+    # pp(hh.scan("clo_tabl_shirt", row_prefix=None, filters="QualifierFilter(=,'substring:black')"))
+    

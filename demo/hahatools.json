@@ -1,0 +1,54 @@
+{
+    "SAVOR": {
+        "SPECIAL": {
+            "human": [
+                "fix",
+                "1"
+            ],
+            "code": [
+                "row_key"
+            ]
+        },
+        "TRASH": [
+            "trash"
+        ]
+    },
+    "TABLE": {
+        "REF": "type",
+        "PREFIX": "table_",
+        "ROW": {
+            "KEY": {
+                "MATERIAL": [
+                    [
+                        "name",
+                        4
+                    ],
+                    [
+                        "phone",
+                        6
+                    ]
+                ],
+                "FUNC": "hasHXOR"
+            }
+        },
+        "IDS": [
+            "friends",
+            "business"
+        ],
+        "COLUMN": {
+            "FAMILIES": {
+                "n": "name",
+                "i": "info"
+            },
+            "QUALIFIERS": {
+                "i:a": "age",
+                "i:p": "phone",
+                "i:c": "code",
+                "i:h": "human"
+            },
+            "RAW_FAM": [
+                "n"
+            ]
+        }
+    }
+}

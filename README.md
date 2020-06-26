@@ -58,29 +58,125 @@ hahaHba consisted by three parts.
 
 * store : Store the data.
 
-##### hahaMeta
+##### hahatools.json
 
-* metadata for hahaHba and hahaSavor
+* metadata for hahaHba and hahaSavor (look demo/save_to_hbase.py)
+
+'''python3
+{
+    'SAVOR':{
+        'SPECIAL':{
+            'human':[ # fix the value to 1
+                'fix', '1',
+            ],
+            "code" :[ # set the value to row-key
+                "row_key"
+            ],
+        },
+        'TRASH':['trash'] # do not regards fields.
+    },
+    'TABLE':{
+        'REF'   :'type',     # field for table id
+        'PREFIX':'table_',   # prefix for table name
+        'ROW':{
+            'KEY':{          # we create the row-key from below fields
+                'MATERIAL':[('name', 4), ('phone', 6)],
+                'FUNC':'hasHXOR' # now, only hasHXOR function is avaliable
+            },
+        },
+        'IDS':[ # we make the table with prefix like : ['test_one', 'test_two']
+            'friends', 'business'
+        ],
+        'COLUMN':{
+            'FAMILIES' : {    # HBase column families. 'family':'field'
+                'n':'name',
+                'i':'info',
+            },
+            'QUALIFIERS' : {  # HBase column qualifier. 'qualifier':'field'
+                'i:a':'age',
+                'i:p':'phone',
+                'i:c':'code',
+                'i:h':'human'
+            },
+            'RAW_FAM' : ['n'] # There are column families which are don't have qualifiers.
+        }
+    }
+}
+'''
 
 ***
 
 ### Examples
+* Sample data
+'''python3
+[
+    {
+        'type':['friends'],
+        'name':['daniel'],
+        'phone':['01012345678'],
+        'age':['26'],
+        'trash':['heheheheheeeaa']
+    },
+    {
+        'type':['business'],
+        'name':['franklin'],
+        'phone':['01098765432'],
+        'age':['31'],
+        'trash':['rororororrrror']
+    },
+]
+'''
 
 * Script
 ```python3
-META_PATH = os.path.join('./', 'hbase_meta.json')
-DATA_PATH = os.path.join('./', 'cleaned.json')
-hs = hahaSavor(META_PATH)
-hs.store(DATA_PATH, '-r') # '-r' is option that resets the table.
+from hahaHba import hahaSavor
+from jSona import jSona
+import os
+
+if __name__=="__main__" :
+    TOOL_PATH = 'hahatools.json'
+    DATA_PATH = 'sample_data.json'
+
+    jSona().saveJson(TOOL_PATH, TOOL)
+    jSona().saveJson(DATA_PATH, DATA)
+    
+    hs = hahaSavor(TOOL_PATH)
+    hs.reset() # set comment if you don't want reset.
+    hs.store(DATA_PATH)
 ```
 * Outputs
 ```python
-Delete table ~_table success.
-Create table ~_table success.
-
-100%|████████████████████████████████████████████████████| 1001/1001 [00:03<00:00, 284.33it/s]
+SAVE SUCCESS TO [ hahatools.json ]
+SAVE SUCCESS TO [ sample_data.json ]
+HBase Connection Success [localhost:9090]
+Delete table table_friends success.
+Create table table_friends success.
+Delete table table_business success.
+Create table table_business success.
+100%|██████████████████████████████████████████| 2/2 [00:00<00:00, 44.12it/s]
 ```
 
+* Check tables by hbase shell
+```
+hbase(main):001:0> scan 'table_friends'
+ROW                      COLUMN+CELL                                                        
+ D@64MMOOKD              column=i:a, timestamp=1593165902246, value=26                      
+ D@64MMOOKD              column=i:c, timestamp=1593165902246, value=D@64MMOOKD              
+ D@64MMOOKD              column=i:h, timestamp=1593165902246, value=1                       
+ D@64MMOOKD              column=i:p, timestamp=1593165902246, value=01012345678             
+ D@64MMOOKD              column=n:daniel, timestamp=1593165902246, value=1                  
+1 row(s)
+Took 0.0288 seconds                                                                         
+hbase(main):002:0> scan 'table_business'
+ROW                      COLUMN+CELL                                                        
+ 7O4AOMMKKP              column=i:a, timestamp=1593165902255, value=31                      
+ 7O4AOMMKKP              column=i:c, timestamp=1593165902255, value=7O4AOMMKKP              
+ 7O4AOMMKKP              column=i:h, timestamp=1593165902255, value=1                       
+ 7O4AOMMKKP              column=i:p, timestamp=1593165902255, value=01098765432             
+ 7O4AOMMKKP              column=n:franklin, timestamp=1593165902255, value=1                
+1 row(s)
+Took 0.0228 seconds
+```
 ***
 
 

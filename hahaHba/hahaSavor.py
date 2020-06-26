@@ -1,6 +1,6 @@
 from hahaHba import hahaHba
 from jSona import jSona
-from Hash import hasHXOR
+from hasH import hasHXOR
 
 from tqdm import tqdm
 import pprint
@@ -9,9 +9,9 @@ import traceback
 
 class hahaSavor :
     def __init__(self, meta='hbase_meta.json', haddr='localhost', hport=9090) :
-        self.jso  = core()
-        self.hh   = core(haddr, hport)
-        self.hxor = hashXOR()
+        self.jso  = jSona()
+        self.hh   = hahaHba(haddr, hport)
+        self.hxor = hasHXOR()
         self.meta = self.jso.loadJson(meta) if type(meta)==type("") else meta
         
     def reset(self) :
@@ -29,7 +29,7 @@ class hahaSavor :
         if ex : exit()
 
     def generate(self, sources, func) :
-        if func == 'hashXOR' : return "".join([self.hxor.digest(source[0], source[1]) for source in sources])
+        if func == 'hasHXOR' : return "".join([self.hxor.digest(source[0], source[1]) for source in sources])
 
     def special(self, special_dict, refer_fields, supplies={'row_key':'default'}) :
         if set(special_dict.keys())-set(refer_fields.keys()) : raise Exception("Special fields {} can't be referenced.".format(special_dict.keys()))
@@ -42,7 +42,7 @@ class hahaSavor :
         return sdata
 
     def configuration(self) :
-        qualifiers_families = [cq.split(':')[0] for cq in self.meta['TABLE']['COLUMN']['QUALIFIERS'].keys()]
+        # qualifiers_families = [cq.split(':')[0] for cq in self.meta['TABLE']['COLUMN']['QUALIFIERS'].keys()]
         main_fields = tuple(self.meta['TABLE']['COLUMN']['FAMILIES'][cf] for cf in self.meta['TABLE']['COLUMN']['RAW_FAM'])
         subo_fields = tuple(self.meta['TABLE']['COLUMN']['QUALIFIERS'].values())
         table_refer = self.meta['TABLE']['REF']
@@ -53,8 +53,8 @@ class hahaSavor :
         familes    = dict(filter(lambda m : m[1] in main_fields, self.meta['TABLE']['COLUMN']['FAMILIES'  ].items()))
         qualifiers = dict(filter(lambda m : m[1] not in spec_fields and m[1] in subo_fields, self.meta['TABLE']['COLUMN']['QUALIFIERS'].items()))
         specials   = {v:k for k,v in self.meta['TABLE']['COLUMN']['QUALIFIERS'].items() if v in self.meta['SAVOR']['SPECIAL']}
-
-        return qualifiers, main_fields, subo_fields, table_refer, spec_fields, trsh_fields, all_fields, familes, qualifiers, specials
+        return qualifiers, table_refer, all_fields, familes, qualifiers, specials
+        # return qualifiers, main_fields, subo_fields, table_refer, spec_fields, trsh_fields, all_fields, familes, qualifiers, specials
 
     def store(self, data, options="", cry=True) :
         if type(data)==type("") : data = self.jso.loadJson(data)
@@ -63,8 +63,8 @@ class hahaSavor :
         # is_vir = len(set(['-v', '--virtual'])&set(options.split()))!=0  # Apply Virtual keypoint?
         try :
             # Get data aligned by fields which are FAMILIES and QUALIFIERS
-            qualifiers, main_fields, subo_fields, table_refer, spec_fields, trsh_fields, all_fields, familes, qualifiers, specials = self.configuration()
-
+            # qualifiers, main_fields, subo_fields, table_refer, spec_fields, trsh_fields, all_fields, familes, qualifiers, specials = self.configuration()
+            qualifiers, table_refer, all_fields, familes, qualifiers, specials = self.configuration()
             if cry : pbar = tqdm(total=len(data))
             for item in data : 
                 if set(item.keys()) - all_fields : raise Exception("No match fields \n * savor({}) : \n * data({})\n => {}".format(
@@ -82,8 +82,7 @@ class hahaSavor :
                 
                 # Append details(qualifiers) to hata
                 for cq,field in qualifiers.items() :
-                    for value in item[field] : 
-                        hata[cq] = str(value)
+                    hata[cq] = self.jso.dumps(item[field], cry=False) if type(item[field]) == type({}) else '\n'.join(item[field])
                 
                 # Append specials to hata
                 hata.update(self.special(self.meta['SAVOR']['SPECIAL'], specials, {'row_key':row_key}))
@@ -106,9 +105,25 @@ class hahaSavor :
 import os
 
 if __name__=="__main__" :
-    META_PATH = os.path.join('/home/park/myElasticsearch/modules/hahaHba/hahaHba/', 'hbase_meta.json')
-    DATA_PATH = os.path.join('/home/park/datasets/zara/datasets/supplied_zara_20200525.json')
+    
+    TYPE_DIRS_NAME = 'zalando'
+    PREF_FILE_NAME = 'supplies'
+    BRAND = 'zalando'
+    
+    META_PATH = os.path.join('/home/park/datasets/{}/settings/'.format(TYPE_DIRS_NAME), 'hbase_meta.json')
     hs = hahaSavor(META_PATH)
-    hs.store(DATA_PATH, '')
+
     # hs.reset()
+    DATES = '20200622_boys'
+    DATA_PATH = os.path.join('/home/park/datasets/{}/datasets/{}_{}_{}.json'.format(TYPE_DIRS_NAME, PREF_FILE_NAME, BRAND, DATES))
+    hs.store(DATA_PATH, '')
+    DATES = '20200622_girls'
+    DATA_PATH = os.path.join('/home/park/datasets/{}/datasets/{}_{}_{}.json'.format(TYPE_DIRS_NAME, PREF_FILE_NAME, BRAND, DATES))
+    hs.store(DATA_PATH, '')
+    DATES = '20200615_mens'
+    DATA_PATH = os.path.join('/home/park/datasets/{}/datasets/{}_{}_{}.json'.format(TYPE_DIRS_NAME, PREF_FILE_NAME, BRAND, DATES))
+    hs.store(DATA_PATH, '')
+    DATES = '20200615_womens'
+    DATA_PATH = os.path.join('/home/park/datasets/{}/datasets/{}_{}_{}.json'.format(TYPE_DIRS_NAME, PREF_FILE_NAME, BRAND, DATES))
+    hs.store(DATA_PATH, '')
                 
