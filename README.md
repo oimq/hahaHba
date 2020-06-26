@@ -62,7 +62,7 @@ hahaHba consisted by three parts.
 
 * metadata for hahaHba and hahaSavor (look demo/save_to_hbase.py)
 
-'''python3
+```python3
 {
     'SAVOR':{
         'SPECIAL':{
@@ -102,13 +102,13 @@ hahaHba consisted by three parts.
         }
     }
 }
-'''
+```
 
 ***
 
 ### Examples
 * Sample data
-'''python3
+```python3
 [
     {
         'type':['friends'],
@@ -125,7 +125,7 @@ hahaHba consisted by three parts.
         'trash':['rororororrrror']
     },
 ]
-'''
+```
 
 * Script
 ```python3
