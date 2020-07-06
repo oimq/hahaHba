@@ -10,7 +10,7 @@ for installing and using, requirements are below :
 
 * thrift : https://github.com/Thriftpy/thriftpy2
 
-* Hash : https://github.com/oimq/Hash
+* hasH : https://github.com/oimq/hasH
 
 ###### 'Very thanks to happybase.'
 
